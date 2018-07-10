@@ -1,21 +1,28 @@
 <?php
 
 namespace AppBundle\Repository;
-use Doctrine\ORM\Mapping;
 
 
+/**
+ * Class ReviewRepository
+ * @package AppBundle\Repository
+ */
 class ReviewRepository extends \Doctrine\ORM\EntityRepository
 {
 
     /**
      * @param $hotelId
-     * @return mixed
+     * @param null $date
+     * @return bool|string
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findRandomReviewFromToday($hotelId)
+    public function findRandomReviewIdFromDate($hotelId , $date = null)
     {
-        $date = date('Y-m-d');
+        if(!$date)
+        {
+            $date = date('Y-m-d');
+        }
+
         $sql ="SELECT review.id
                FROM `review` AS review 
                JOIN (SELECT (RAND() * (SELECT MAX(id) FROM `review`)) AS id) AS random
@@ -26,6 +33,18 @@ class ReviewRepository extends \Doctrine\ORM\EntityRepository
                LIMIT 1";
         $entityManager =$this->getEntityManager();
         $reviewId = $entityManager->getConnection()->query($sql)->fetchColumn();
+        return $reviewId;
+    }
+    
+    /**
+     * @param $hotelId
+     * @return mixed
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findRandomReviewFromToday($hotelId)
+    {
+        $reviewId = $this->findRandomReviewIdFromDate($hotelId);
         $queryBuilder = $this->createQueryBuilder('reviews');
         $queryBuilder
             ->where("reviews.hotel = '{$hotelId}'")
