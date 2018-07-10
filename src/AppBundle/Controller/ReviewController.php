@@ -1,22 +1,22 @@
 <?php
 
 namespace AppBundle\Controller;
-
-
 use AppBundle\Entity\Review;
 use AppBundle\Entity\Hotel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ReviewController extends Controller
 {
     /**
+     * @param $id
+     * @return Response
      * @Route("{id}/today/review", name="daily_review")
      */
     public function reviewAction($id)
     {
         $entityManager = $this->getDoctrine()->getManager();
-
         $hotel = $entityManager->getRepository(Hotel::class)->findOneBy(['id' => $id]);
 
         if(!$hotel) {
@@ -24,15 +24,8 @@ class ReviewController extends Controller
             throw $this->createNotFoundException('The hotel id was not found');
 
         }else{
-            $queryBuilder = $entityManager->getRepository(Review::class)->createQueryBuilder('reviews');
-            $queryBuilder
-                ->where("reviews.hotel_id == $id")
-                ->andwhere('reviews.crearedAt > :morning')
-                ->setParameter('morning', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME)
-                ->addSelect('RAND() as HIDDEN rand')->orderBy('rand')
-                ->setMaxResults(1);
-            $review = $queryBuilder->getQuery()->getOneOrNullResult();
 
+            $review = $entityManager->getRepository(Review::class)->findRandomReviewFromToday($id);
             if($review === null)
             {
                 $message = "Sorry today You dont got any reviews";

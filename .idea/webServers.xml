@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="c6fba28a-6297-4476-8272-ca09a79e85e2" name="mikand91.ayz.pl" url="http://mikand91.ayz.pl">
-        <fileTransfer host="mikand91.ayz.pl" port="21" rootFolder="/public_html/daily">
+        <fileTransfer host="mikand91.ayz.pl" port="21">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>

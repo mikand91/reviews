@@ -5,7 +5,7 @@
       <paths name="mikand91.ayz.pl">
         <serverdata>
           <mappings>
-            <mapping deploy="" local="$PROJECT_DIR$" web="/daily" />
+            <mapping deploy="public_html/daily" local="$PROJECT_DIR$" web="/daily" />
           </mappings>
         </serverdata>
       </paths>
