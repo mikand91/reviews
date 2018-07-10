@@ -31,6 +31,14 @@ framework:
     php_errors:
         log: true
 
+# Cache configuration
+
+    cache:
+        pools:
+            reviews_cache:
+                adapter: cache.adapter.filesystem
+                default_lifetime: 60
+
 # Twig Configuration
 twig:
     debug: '%kernel.debug%'

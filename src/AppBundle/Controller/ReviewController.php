@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Controller;
+
 use AppBundle\Entity\Review;
 use AppBundle\Entity\Hotel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,17 +29,19 @@ class ReviewController extends Controller
             $review = $entityManager->getRepository(Review::class)->findRandomReviewFromToday($id);
             if($review === null)
             {
-                $message = "Sorry today You dont got any reviews";
-                return $this -> render('Review/sorry.html.twig' ,
+                $message = "Sorry, today You dont got any reviews";
+                $response =  $this -> render('Review/sorry.html.twig' ,
                     [
                         'message' => $message
                     ]);
             }else{
-                return $this -> render('Review/review.html.twig' ,
+                $response =  $this -> render('Review/review.html.twig' ,
                     [
                         'review' => $review
                     ]);
             }
+            $response->setSharedMaxAge(300);
+            return $response;
         }
     }
 }
